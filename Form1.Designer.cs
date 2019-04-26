@@ -33,13 +33,13 @@
             this.全部参数ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.全部参数ToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.设置内存上限ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.textBox文件名 = new System.Windows.Forms.TextBox();
+            this.textBox可执行文件 = new System.Windows.Forms.TextBox();
             this.label可执行文件 = new System.Windows.Forms.Label();
             this.groupBox参数列表 = new System.Windows.Forms.GroupBox();
-            this.textBox参数 = new System.Windows.Forms.TextBox();
-            this.button拷贝 = new System.Windows.Forms.Button();
-            this.button运行 = new System.Windows.Forms.Button();
-            this.button清空 = new System.Windows.Forms.Button();
+            this.textBox所有参数 = new System.Windows.Forms.TextBox();
+            this.button拷贝至剪切板 = new System.Windows.Forms.Button();
+            this.button开启进程 = new System.Windows.Forms.Button();
+            this.button保存状态 = new System.Windows.Forms.Button();
             this.label执行目录 = new System.Windows.Forms.Label();
             this.textBox执行目录 = new System.Windows.Forms.TextBox();
             this.button结束进程 = new System.Windows.Forms.Button();
@@ -86,15 +86,15 @@
             this.设置内存上限ToolStripMenuItem.Text = "推荐内存上限";
             this.设置内存上限ToolStripMenuItem.Click += new System.EventHandler(this.设置内存上限ToolStripMenuItem_Click);
             // 
-            // textBox文件名
+            // textBox可执行文件
             // 
-            this.textBox文件名.AllowDrop = true;
-            this.textBox文件名.Location = new System.Drawing.Point(90, 51);
-            this.textBox文件名.Name = "textBox文件名";
-            this.textBox文件名.Size = new System.Drawing.Size(334, 21);
-            this.textBox文件名.TabIndex = 1;
-            this.textBox文件名.DragDrop += new System.Windows.Forms.DragEventHandler(this.textBox文件名_DragDrop);
-            this.textBox文件名.DragEnter += new System.Windows.Forms.DragEventHandler(this.textBox_DragEnter);
+            this.textBox可执行文件.AllowDrop = true;
+            this.textBox可执行文件.Location = new System.Drawing.Point(90, 51);
+            this.textBox可执行文件.Name = "textBox可执行文件";
+            this.textBox可执行文件.Size = new System.Drawing.Size(334, 21);
+            this.textBox可执行文件.TabIndex = 1;
+            this.textBox可执行文件.DragDrop += new System.Windows.Forms.DragEventHandler(this.textBox文件名_DragDrop);
+            this.textBox可执行文件.DragEnter += new System.Windows.Forms.DragEventHandler(this.textBox_DragEnter);
             // 
             // label可执行文件
             // 
@@ -107,7 +107,7 @@
             // 
             // groupBox参数列表
             // 
-            this.groupBox参数列表.Controls.Add(this.textBox参数);
+            this.groupBox参数列表.Controls.Add(this.textBox所有参数);
             this.groupBox参数列表.Font = new System.Drawing.Font("宋体", 8F);
             this.groupBox参数列表.Location = new System.Drawing.Point(14, 78);
             this.groupBox参数列表.Name = "groupBox参数列表";
@@ -116,48 +116,48 @@
             this.groupBox参数列表.TabStop = false;
             this.groupBox参数列表.Text = "参数列表";
             // 
-            // textBox参数
+            // textBox所有参数
             // 
-            this.textBox参数.AllowDrop = true;
-            this.textBox参数.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.textBox参数.Location = new System.Drawing.Point(7, 11);
-            this.textBox参数.Multiline = true;
-            this.textBox参数.Name = "textBox参数";
-            this.textBox参数.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox参数.Size = new System.Drawing.Size(651, 346);
-            this.textBox参数.TabIndex = 0;
-            this.textBox参数.DragDrop += new System.Windows.Forms.DragEventHandler(this.textBox参数_DragDrop);
-            this.textBox参数.DragEnter += new System.Windows.Forms.DragEventHandler(this.textBox_DragEnter);
+            this.textBox所有参数.AllowDrop = true;
+            this.textBox所有参数.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.textBox所有参数.Location = new System.Drawing.Point(7, 11);
+            this.textBox所有参数.Multiline = true;
+            this.textBox所有参数.Name = "textBox所有参数";
+            this.textBox所有参数.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBox所有参数.Size = new System.Drawing.Size(651, 346);
+            this.textBox所有参数.TabIndex = 0;
+            this.textBox所有参数.DragDrop += new System.Windows.Forms.DragEventHandler(this.textBox参数_DragDrop);
+            this.textBox所有参数.DragEnter += new System.Windows.Forms.DragEventHandler(this.textBox_DragEnter);
             // 
-            // button拷贝
+            // button拷贝至剪切板
             // 
-            this.button拷贝.Location = new System.Drawing.Point(430, 30);
-            this.button拷贝.Name = "button拷贝";
-            this.button拷贝.Size = new System.Drawing.Size(59, 36);
-            this.button拷贝.TabIndex = 4;
-            this.button拷贝.Text = "拷贝至剪切板";
-            this.button拷贝.UseVisualStyleBackColor = true;
-            this.button拷贝.Click += new System.EventHandler(this.button拷贝_Click);
+            this.button拷贝至剪切板.Location = new System.Drawing.Point(430, 30);
+            this.button拷贝至剪切板.Name = "button拷贝至剪切板";
+            this.button拷贝至剪切板.Size = new System.Drawing.Size(59, 36);
+            this.button拷贝至剪切板.TabIndex = 4;
+            this.button拷贝至剪切板.Text = "拷贝至剪切板";
+            this.button拷贝至剪切板.UseVisualStyleBackColor = true;
+            this.button拷贝至剪切板.Click += new System.EventHandler(this.button拷贝至剪切板_Click);
             // 
-            // button运行
+            // button开启进程
             // 
-            this.button运行.Location = new System.Drawing.Point(491, 30);
-            this.button运行.Name = "button运行";
-            this.button运行.Size = new System.Drawing.Size(63, 36);
-            this.button运行.TabIndex = 5;
-            this.button运行.Text = "开启进程";
-            this.button运行.UseVisualStyleBackColor = true;
-            this.button运行.Click += new System.EventHandler(this.button运行_Click);
+            this.button开启进程.Location = new System.Drawing.Point(491, 30);
+            this.button开启进程.Name = "button开启进程";
+            this.button开启进程.Size = new System.Drawing.Size(63, 36);
+            this.button开启进程.TabIndex = 5;
+            this.button开启进程.Text = "开启进程";
+            this.button开启进程.UseVisualStyleBackColor = true;
+            this.button开启进程.Click += new System.EventHandler(this.button开启进程_Click);
             // 
-            // button清空
+            // button保存状态
             // 
-            this.button清空.Location = new System.Drawing.Point(624, 30);
-            this.button清空.Name = "button清空";
-            this.button清空.Size = new System.Drawing.Size(48, 36);
-            this.button清空.TabIndex = 6;
-            this.button清空.Text = "保存";
-            this.button清空.UseVisualStyleBackColor = true;
-            this.button清空.Click += new System.EventHandler(this.button保存_Click);
+            this.button保存状态.Location = new System.Drawing.Point(624, 30);
+            this.button保存状态.Name = "button保存状态";
+            this.button保存状态.Size = new System.Drawing.Size(48, 36);
+            this.button保存状态.TabIndex = 6;
+            this.button保存状态.Text = "保存状态";
+            this.button保存状态.UseVisualStyleBackColor = true;
+            this.button保存状态.Click += new System.EventHandler(this.button保存状态_Click);
             // 
             // label执行目录
             // 
@@ -205,12 +205,12 @@
             this.Controls.Add(this.button结束进程);
             this.Controls.Add(this.textBox执行目录);
             this.Controls.Add(this.label执行目录);
-            this.Controls.Add(this.button清空);
-            this.Controls.Add(this.button运行);
-            this.Controls.Add(this.button拷贝);
+            this.Controls.Add(this.button保存状态);
+            this.Controls.Add(this.button开启进程);
+            this.Controls.Add(this.button拷贝至剪切板);
             this.Controls.Add(this.groupBox参数列表);
             this.Controls.Add(this.label可执行文件);
-            this.Controls.Add(this.textBox文件名);
+            this.Controls.Add(this.textBox可执行文件);
             this.Controls.Add(this.menuStripMain);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MainMenuStrip = this.menuStripMain;
@@ -232,14 +232,14 @@
         private System.Windows.Forms.MenuStrip menuStripMain;
         private System.Windows.Forms.ToolStripMenuItem 常用参数ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 全部参数ToolStripMenuItem;
-        private System.Windows.Forms.TextBox textBox文件名;
+        private System.Windows.Forms.TextBox textBox可执行文件;
         private System.Windows.Forms.Label label可执行文件;
         private System.Windows.Forms.GroupBox groupBox参数列表;
-        private System.Windows.Forms.TextBox textBox参数;
-        private System.Windows.Forms.Button button拷贝;
-        private System.Windows.Forms.Button button运行;
+        private System.Windows.Forms.TextBox textBox所有参数;
+        private System.Windows.Forms.Button button拷贝至剪切板;
+        private System.Windows.Forms.Button button开启进程;
         private System.Windows.Forms.ToolStripMenuItem 全部参数ToolStripMenuItem2;
-        private System.Windows.Forms.Button button清空;
+        private System.Windows.Forms.Button button保存状态;
         private System.Windows.Forms.Label label执行目录;
         private System.Windows.Forms.TextBox textBox执行目录;
         private System.Windows.Forms.Button button结束进程;

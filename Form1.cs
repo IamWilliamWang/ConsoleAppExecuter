@@ -70,10 +70,10 @@ namespace ConsoleAppExecuteHelper
         /// <param name="e"></param>
         public void AddParmToTextBox(object sender, EventArgs e)
         {
-            if (this.textBox参数.Text != "")
-                this.textBox参数.Text += "\r\n";
+            if (this.textBox所有参数.Text != "")
+                this.textBox所有参数.Text += "\r\n";
 
-            this.textBox参数.Text += ((ToolStripMenuItem)sender).Text;
+            this.textBox所有参数.Text += ((ToolStripMenuItem)sender).Text;
         }
 
         private void AddMainOptions()
@@ -112,9 +112,9 @@ namespace ConsoleAppExecuteHelper
                 return;
             }
             this.textBox执行目录.Text = saved[0];
-            this.textBox文件名.Text = saved[1];
+            this.textBox可执行文件.Text = saved[1];
             saved.RemoveRange(0, 2);
-            this.textBox参数.Lines = this.saved.ToArray();
+            this.textBox所有参数.Lines = this.saved.ToArray();
         }
         #endregion
 
@@ -143,15 +143,15 @@ namespace ConsoleAppExecuteHelper
         private void textBox文件名_DragDrop(object sender, DragEventArgs e)
         {
             string[] filePath = (string[])e.Data.GetData(DataFormats.FileDrop);
-            this.textBox文件名.Text = filePath[0];
+            this.textBox可执行文件.Text = filePath[0];
             this.textBox执行目录.Text = DetectRootPath(filePath[0]);
 
             this.textBox执行目录.Focus();
-            this.textBox执行目录.Select(this.textBox文件名.TextLength, 0);
+            this.textBox执行目录.Select(this.textBox可执行文件.TextLength, 0);
             this.textBox执行目录.ScrollToCaret();
-            this.textBox文件名.Focus();
-            this.textBox文件名.Select(this.textBox文件名.TextLength, 0);
-            this.textBox文件名.ScrollToCaret();
+            this.textBox可执行文件.Focus();
+            this.textBox可执行文件.Select(this.textBox可执行文件.TextLength, 0);
+            this.textBox可执行文件.ScrollToCaret();
         }
 
         private void textBox参数_DragDrop(object sender, DragEventArgs e)
@@ -159,14 +159,14 @@ namespace ConsoleAppExecuteHelper
             string[] filePath = (string[])e.Data.GetData(DataFormats.FileDrop);
             if (filePath.Length != 1)
                 return;
-            this.textBox参数.Text += " ";
+            this.textBox所有参数.Text += " ";
             if (this.textBox执行目录.Text.EndsWith("\\"))
                 this.textBox执行目录.Text = this.textBox执行目录.Text.Substring(0, this.textBox执行目录.Text.Length - 1);
             filePath[0] = filePath[0].Replace(this.textBox执行目录.Text, ".");
             if (filePath[0].IndexOf(" ") == -1)
-                this.textBox参数.Text += filePath[0];
+                this.textBox所有参数.Text += filePath[0];
             else
-                this.textBox参数.Text += "\"" + filePath[0] + "\"";
+                this.textBox所有参数.Text += "\"" + filePath[0] + "\"";
         }
 
         private void textBox执行目录_DragDrop(object sender, DragEventArgs e)
@@ -179,21 +179,21 @@ namespace ConsoleAppExecuteHelper
         #endregion
 
         #region 按钮功能
-        private void button拷贝_Click(object sender, EventArgs e)
+        private void button拷贝至剪切板_Click(object sender, EventArgs e)
         {
             if (this.SystemCommandStr != null)
                 Clipboard.SetText(this.SystemCommandStr);
         }
 
-        private void button运行_Click(object sender, EventArgs e)
+        private void button开启进程_Click(object sender, EventArgs e)
         {
             if (mainProcess != null)
                 if (mainProcess.HasExited == false)
                     mainProcess.Kill();
             mainProcess = new Process();
-            mainProcess.StartInfo.FileName = this.textBox文件名.Text;
-            if (this.textBox参数.Text != "")
-                mainProcess.StartInfo.Arguments = this.SystemCommandStr.Substring(this.textBox文件名.TextLength + 1);
+            mainProcess.StartInfo.FileName = this.textBox可执行文件.Text;
+            if (this.textBox所有参数.Text != "")
+                mainProcess.StartInfo.Arguments = this.SystemCommandStr.Substring(this.textBox可执行文件.TextLength + 1);
             mainProcess.StartInfo.WorkingDirectory = this.textBox执行目录.Text;
             mainProcess.Start();
             if (this.workingSet != IntPtr.Zero)
@@ -206,7 +206,7 @@ namespace ConsoleAppExecuteHelper
                 mainProcess.Kill();
         }
 
-        private void button保存_Click(object sender, EventArgs e)
+        private void button保存状态_Click(object sender, EventArgs e)
         {
             var savingDictionary = new Dictionary<string, List<string>>();
 
@@ -215,8 +215,8 @@ namespace ConsoleAppExecuteHelper
             savingDictionary["PROCESS_NAME"] = new List<String>(new String[] { this.processName });
             this.saved = new List<string>();
             saved.Add(this.textBox执行目录.Text);
-            saved.Add(this.textBox文件名.Text);
-            foreach (var line in this.textBox参数.Lines)
+            saved.Add(this.textBox可执行文件.Text);
+            foreach (var line in this.textBox所有参数.Lines)
                 saved.Add(line);
             savingDictionary["SAVED"] = this.saved;
             FileUtil.WriteConfigFile(configFilename, savingDictionary);
@@ -241,8 +241,8 @@ namespace ConsoleAppExecuteHelper
         {
             get
             {
-                string result = this.textBox文件名.Text;
-                foreach (string 参数 in this.textBox参数.Lines)
+                string result = this.textBox可执行文件.Text;
+                foreach (string 参数 in this.textBox所有参数.Lines)
                     result += " " + 参数;
                 return result;
             }
