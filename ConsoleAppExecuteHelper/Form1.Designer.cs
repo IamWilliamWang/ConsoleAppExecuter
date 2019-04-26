@@ -94,7 +94,7 @@
             this.textBox文件名.Size = new System.Drawing.Size(334, 21);
             this.textBox文件名.TabIndex = 1;
             this.textBox文件名.DragDrop += new System.Windows.Forms.DragEventHandler(this.textBox文件名_DragDrop);
-            this.textBox文件名.DragEnter += new System.Windows.Forms.DragEventHandler(this.textBox文件名_DragEnter);
+            this.textBox文件名.DragEnter += new System.Windows.Forms.DragEventHandler(this.textBox_DragEnter);
             // 
             // label可执行文件
             // 
@@ -127,7 +127,7 @@
             this.textBox参数.Size = new System.Drawing.Size(651, 346);
             this.textBox参数.TabIndex = 0;
             this.textBox参数.DragDrop += new System.Windows.Forms.DragEventHandler(this.textBox参数_DragDrop);
-            this.textBox参数.DragEnter += new System.Windows.Forms.DragEventHandler(this.textBox文件名_DragEnter);
+            this.textBox参数.DragEnter += new System.Windows.Forms.DragEventHandler(this.textBox_DragEnter);
             // 
             // button拷贝
             // 
@@ -176,7 +176,7 @@
             this.textBox执行目录.Size = new System.Drawing.Size(334, 21);
             this.textBox执行目录.TabIndex = 8;
             this.textBox执行目录.DragDrop += new System.Windows.Forms.DragEventHandler(this.textBox执行目录_DragDrop);
-            this.textBox执行目录.DragEnter += new System.Windows.Forms.DragEventHandler(this.textBox文件名_DragEnter);
+            this.textBox执行目录.DragEnter += new System.Windows.Forms.DragEventHandler(this.textBox_DragEnter);
             // 
             // button结束进程
             // 
