@@ -155,9 +155,9 @@
             this.button清空.Name = "button清空";
             this.button清空.Size = new System.Drawing.Size(48, 36);
             this.button清空.TabIndex = 6;
-            this.button清空.Text = "清空";
+            this.button清空.Text = "保存";
             this.button清空.UseVisualStyleBackColor = true;
-            this.button清空.Click += new System.EventHandler(this.button清空_Click);
+            this.button清空.Click += new System.EventHandler(this.button保存_Click);
             // 
             // label执行目录
             // 
@@ -170,10 +170,13 @@
             // 
             // textBox执行目录
             // 
+            this.textBox执行目录.AllowDrop = true;
             this.textBox执行目录.Location = new System.Drawing.Point(90, 30);
             this.textBox执行目录.Name = "textBox执行目录";
             this.textBox执行目录.Size = new System.Drawing.Size(334, 21);
             this.textBox执行目录.TabIndex = 8;
+            this.textBox执行目录.DragDrop += new System.Windows.Forms.DragEventHandler(this.textBox执行目录_DragDrop);
+            this.textBox执行目录.DragEnter += new System.Windows.Forms.DragEventHandler(this.textBox文件名_DragEnter);
             // 
             // button结束进程
             // 

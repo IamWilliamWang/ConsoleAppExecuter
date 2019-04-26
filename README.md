@@ -1,7 +1,7 @@
 # ConsoleAppExecuter
 A helper tool that makes it easy to call an application by passing arguments.
 
-Version: 1.1
+Version: 1.3
 
 **Lightspot**:
 
@@ -19,4 +19,4 @@ For console programs, the pass-through execution process becomes very simple.
 
 5. Click copy to clipboard to copy executable command.
 
-6. Click empty to empty the content below.
+6. Click save to save current status.

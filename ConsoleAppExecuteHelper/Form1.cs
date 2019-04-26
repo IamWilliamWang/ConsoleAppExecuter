@@ -14,8 +14,13 @@ namespace ConsoleAppExecuteHelper
 {
     public partial class Form1 : Form
     {
-        private Process mainProcess = null;
-        private IntPtr workingSet = IntPtr.Zero;
+        private Process mainProcess { get; set; } = null;
+        private IntPtr workingSet { get; set; } = IntPtr.Zero;
+
+        private List<string> allSelection;
+        private List<string> mainSelection;
+        private string processName;
+        private List<string> saved;
 
         private string CommandStr { get {
                 string result = this.textBox文件名.Text;
@@ -36,69 +41,65 @@ namespace ConsoleAppExecuteHelper
             {
                 MessageBox.Show("找不到配置文件" + configFilename + "！", "无法启动");
                 Application.Exit();
+                return;
             }
+            // 读取数据
+            var moduleMap = FileUtil.ReadConfigFile(configFilename);
+            allSelection = moduleMap["OPTIONS"];
+            mainSelection = moduleMap["MAIN_OPTIONS"];
+            processName = moduleMap["PROCESS_NAME"][0];
+            
+            if (moduleMap.ContainsKey("SAVED"))
+                saved = moduleMap["SAVED"];
 
-            List<string> allStrings = File.ReadAllLines(configFilename).ToList();
-            string title = ""; //2
-            List<string> mainList = new List<string>();//1
-            List<string> allList = new List<string>();//0
-            int insertFlag = 0;
-            foreach(string line in allStrings)
-            {
-                if(line == "#####MAIN_OPTIONS#####")
-                    insertFlag = 1;
-                else if(line == "#####PROCESS_NAME#####")
-                    insertFlag = 2;
-                else
-                {
-                    switch(insertFlag)
-                    {
-                        case 0:
-                            allList.Add(line);
-                            break;
-                        case 1:
-                            mainList.Add(line);
-                            break;
-                        case 2:
-                            title = line;
-                            break;
-                        default:
-                            throw new Exception("发生未知错误");
-                    }
-                }
-            }
-            mainList.Sort();
-            allList.Sort();
+            mainSelection.Sort();
+            allSelection.Sort();
 
-            AddTitle(title);
-            AddMainOptions(mainList);
-            AddTotalOptions(allList);
+            AddTitle();
+            AddMainOptions();
+            AddTotalOptions();
+            ResumeSaving();
         }
 
-        private void AddTitle(string title)
+        private void ResumeSaving()
         {
-            this.Text = title + this.Text;
+            if (saved == null)
+                return;
+            if (saved.Count < 2) {
+                MessageBox.Show("备份信息读取失败！");
+                return;
+            }
+            this.textBox执行目录.Text = saved[0];
+            this.textBox文件名.Text = saved[1];
+            saved.RemoveRange(0, 2);
+            this.textBox参数.Lines = this.saved.ToArray();
         }
 
-        private void AddMainOptions(List<string> mainOptions)
+        private void AddTitle()
         {
-            foreach (string itemString in mainOptions)
+            this.Text = this.processName + this.Text;
+        }
+
+        private void AddMainOptions()
+        {
+            foreach (string itemString in this.mainSelection)
             {
                 ToolStripMenuItem toolStripMenuItem = new ToolStripMenuItem();
-                toolStripMenuItem.Text = itemString.Replace("-", "");
+                toolStripMenuItem.Text = itemString;
                 toolStripMenuItem.Click += AddParm;
                 常用参数ToolStripMenuItem.DropDownItems.Add(toolStripMenuItem);
             }
         }
 
-        private void AddTotalOptions(List<string> totalOptions)
+        private void AddTotalOptions()
         {
-            foreach (string itemString in totalOptions)
+            foreach (string itemString in this.allSelection)
             {
                 ToolStripMenuItem toolStripMenuItem = new ToolStripMenuItem();
-                toolStripMenuItem.Text = itemString.Replace("-", "");
+                toolStripMenuItem.Text = itemString;
                 toolStripMenuItem.Click += AddParm;
-                if (toolStripMenuItem.Text.CompareTo("--k") < 0)
+                var optionString = itemString.Replace("-", "");
+                if (optionString.CompareTo("k") < 0)
                     全部参数ToolStripMenuItem.DropDownItems.Add(toolStripMenuItem);
                 else
                     全部参数ToolStripMenuItem2.DropDownItems.Add(toolStripMenuItem);
@@ -129,10 +130,10 @@ namespace ConsoleAppExecuteHelper
 
         private string DetectRootPath(string filename)
         {
-            if (filename.IndexOf("openpose") == -1)
+            if (!filename.ToLower().Contains(this.processName.ToLower()))
                 return filename.Substring(0,filename.LastIndexOf("\\"));
             else
-                return filename.Substring(0, filename.IndexOf("\\", filename.IndexOf("openpose")));
+                return filename.Substring(0, filename.IndexOf("\\", filename.ToLower().IndexOf(processName.ToLower())));
         }
 
         private void button拷贝_Click(object sender, EventArgs e)
@@ -163,12 +164,24 @@ namespace ConsoleAppExecuteHelper
             if (this.textBox参数.Text != "")
                 this.textBox参数.Text += "\r\n";
 
-            this.textBox参数.Text += "--" + ((ToolStripMenuItem)sender).Text;
+            this.textBox参数.Text += ((ToolStripMenuItem)sender).Text;
         }
 
-        private void button清空_Click(object sender, EventArgs e)
+        private void button保存_Click(object sender, EventArgs e)
         {
-            this.textBox参数.Text = "";
+            var savingDictionary = new Dictionary<string, List<string>>();
+            
+            savingDictionary["OPTIONS"] = this.allSelection;
+            savingDictionary["MAIN_OPTIONS"] = this.mainSelection;
+            savingDictionary["PROCESS_NAME"] = new List<String>(new String[] { this.processName });
+            this.saved = new List<string>();
+            saved.Add(this.textBox执行目录.Text);
+            saved.Add(this.textBox文件名.Text);
+            foreach (var line in this.textBox参数.Lines)
+                saved.Add(line);
+            savingDictionary["SAVED"] = this.saved;
+            FileUtil.WriteConfigFile("options.conf", savingDictionary);
+            MessageBox.Show("保存成功！");
         }
 
         private void textBox参数_DragDrop(object sender, DragEventArgs e)
@@ -194,13 +207,21 @@ namespace ConsoleAppExecuteHelper
 
         private void 设置内存上限ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string maxWorkingSet = Microsoft.VisualBasic.Interaction.InputBox("输入最大内存限制(M):","请输入");
+            string maxWorkingSet = InputBoxUtil.Interaction.InputBox("输入最大内存限制(M):", "请输入", hint: "该限制为推荐内存，不能完全强行限制内存占用。", defaultReturn: "");
             if (maxWorkingSet == "")
                 return;
             float 兆count = float.Parse(maxWorkingSet);
             int byteCount = (int)(兆count * 1024 * 1024);
             this.workingSet = (IntPtr)(byteCount);
             this.labelMaxWorkingSet.Text = "[最大内存限制：" + 兆count + " M]";
+        }
+
+        private void textBox执行目录_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] filePath = (string[])e.Data.GetData(DataFormats.FileDrop);
+            if (filePath.Length != 1)
+                return;
+            this.textBox执行目录.Text = filePath[0];
         }
     }
 }
